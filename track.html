@@ -48,6 +48,9 @@
 
     <script>
         const DIST_CODE = "363"; // Pune
+        const POLLING_FREQ = 20000; // 20 Seconds
+        const PINS_TO_IGNORE = [413801, 412202, 412212, 411057];
+
         function getTodaysDate() {
             var today = new Date();
             var dd = today.getDate();
@@ -56,6 +59,15 @@
             if (dd < 10) dd = '0' + dd;
             if (mm < 10) mm = '0' + mm;
             return dd + '-' + mm + '-' + yyyy;
+        }
+
+        function playSound() {
+            var audio = new Audio('audio.mp3');
+            audio.play().then(() => {
+                document.getElementById('sound-permission-status').innerHTML = 'Current Audio Status: <span class="badge bg-success">Permission Granted</span>';
+            }).catch(() => {
+                document.getElementById('sound-permission-status').innerHTML = 'Current Audio Status: <span class="badge bg-danger">Permission Required</span>';;
+            });
         }
 
         function fetchData() {
@@ -80,15 +92,6 @@
                 })
         }
 
-        function playSound() {
-            var audio = new Audio('audio.mp3');
-            audio.play().then(() => {
-                document.getElementById('sound-permission-status').innerHTML = 'Current Audio Status: <span class="badge bg-success">Permission Granted</span>';
-            }).catch(() => {
-                document.getElementById('sound-permission-status').innerHTML = 'Current Audio Status: <span class="badge bg-danger">Permission Required</span>';;
-            });
-        }
-
         function parseData(centers) {
             let availableCenters = [];
             let count = 0;
@@ -105,8 +108,9 @@
                 for (var session of currentCenter.sessions) {
                     if (session.min_age_limit == 18) {
                         count++;
-                        if (session.available_capacity > 0) {
-                            // if (true) {
+                        // if (session.available_capacity > 0 && PINS_TO_IGNORE.indexOf(currentCenter.pincode) === -1) {
+                        if (true) {
+
                             availableCenters.push(session);
                             tableString = tableString + `<tr>
                                 <td>${session.date}</td>
@@ -129,7 +133,8 @@
                 playSound();
             }
         }
-        setInterval(fetchData, 30000);
+
+        setInterval(fetchData, POLLING_FREQ);
         fetchData();
     </script>
 </body>
