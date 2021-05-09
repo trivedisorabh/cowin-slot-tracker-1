@@ -1,0 +1,112 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<body>
+    <div style="margin: 0 20px">
+        <h1 style="width: 25%; margin: 20px auto">Slot Finder for Pune</h1>
+        <span id="api-error" class="hide label label-danger">Error in API, Retry after sometime....</span>
+        <span id="api-fetch-msg" class="label label-success">Fetching Data...</span>
+        <div id="count-msg" class="alert alert-info"></div>
+        <!-- <hr /> -->
+        <div id="available-msg" class="alert alert-info"></div>
+        <hr />
+        <div id="main"></div>
+        <hr />
+        <div class="row" style="margin: 0 auto">
+            <div class="col-2">
+                <button class="btn btn-primary" onClick="playSound()">Test Sound ! </button>
+                <span class="text-muted">(Click this once after page refresh/opening for granting sound permission to this page)</span>
+
+            </div>
+            <div id="sound-permission-status"> Current Audio Status:
+                <span class="label label-danger">Permission Required</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        function getTodaysDate() {
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1;
+            var yyyy = today.getFullYear();
+            if (dd < 10) dd = '0' + dd;
+            if (mm < 10) mm = '0' + mm;
+            return dd + '-' + mm + '-' + yyyy;
+        }
+
+        function fetchData() {
+            const today = getTodaysDate();
+            const apiKey = "48m5Mhn2+YeoafuB11Lq1D5sm2af6A0seSIb6un+3/8=";
+            document.getElementById("api-error").className = "hide";
+            document.getElementById("api-fetch-msg").className = "show label label-success";
+            fetch(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id=363&date=${today}`)
+                .then((res) => (res.json()))
+                .then((res) => {
+                    document.getElementById("api-fetch-msg").className = "hide";
+                    document.getElementById("api-error").className = "hide";
+                    parseData(res.centers)
+                })
+                .catch(() => {
+                    document.getElementById("api-fetch-msg").className = "hide";
+                    document.getElementById("api-error").className = "show label label-danger";
+                })
+        }
+
+        function playSound() {
+            var audio = new Audio('audio.mp3');
+            audio.play().then(()=>{
+                document.getElementById('sound-permission-status').innerHTML = 'Current Audio Status: <span class="label label-success">Permission Granted</span>';
+            }).catch(() => {
+                document.getElementById('sound-permission-status').innerHTML = 'Current Audio Status: <span class="label label-danger">Permission Required</span>';;
+            });
+        }
+
+        function parseData(centers) {
+            let availableCenters = [];
+            let count = 0;
+            let tableString = `<table class="table table-striped"><thead>
+                <th>Date</th>
+                <th>Vaccination</th>
+                <th>Slots</th>
+                <th>Pincode</th>
+                <th>Name</th>
+                <th>Address</th>
+                </thead><tbody>`;
+            for (var i = 0; i < centers.length; i++) {
+                var currentCenter = centers[i];
+                for (var session of currentCenter.sessions) {
+                    if (session.min_age_limit == 18) {
+                        count++;
+                        if (session.available_capacity > 0) {
+                            availableCenters.push(session);
+                            tableString = tableString + `<tr>
+                                <td>${session.date}</td>
+                                <td>${session.vaccine}</td>
+                                <td>${session.available_capacity}</td>
+                                <td>${currentCenter.pincode}</td>
+                                <td>${currentCenter.name}</td>
+                                <td>${currentCenter.address}</td>
+                                </tr>`;
+                        }
+                    }
+                }
+            }
+            tableString = tableString + '</tbody></table>'
+            document.getElementById("count-msg").innerHTML = `Centers found: ${count}`;
+            document.getElementById("available-msg").innerHTML = `Slot available in: ${availableCenters.length}`;
+            if (availableCenters.length) {
+                console.log('Slot found please check page');
+                document.getElementById("main").innerHTML = tableString;
+                playSound();
+            }
+        }
+        setInterval(fetchData, 30000);
+        fetchData();
+    </script>
+</body>
+
+</html>
