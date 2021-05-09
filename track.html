@@ -108,9 +108,7 @@
                 for (var session of currentCenter.sessions) {
                     if (session.min_age_limit == 18) {
                         count++;
-                        // if (session.available_capacity > 0 && PINS_TO_IGNORE.indexOf(currentCenter.pincode) === -1) {
-                        if (true) {
-
+                        if (session.available_capacity > 0 && PINS_TO_IGNORE.indexOf(currentCenter.pincode) === -1) {
                             availableCenters.push(session);
                             tableString = tableString + `<tr>
                                 <td>${session.date}</td>
