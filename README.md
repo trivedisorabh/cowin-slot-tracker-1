@@ -7,6 +7,6 @@ A Web page that triggers notification when vaccination slot is available in Pune
 3. Click on *Test Audio* Button
 
 ### Extra:
-- A pp can poll data for any district. Just change variable *DIST_CODE* to any valid value
+- App can poll data for any district. Just change variable *DIST_CODE* to any valid value
 - Polling frequency can be change by editing variable *POLLING_FREQ*
 - Certain pincodes can be ignored, just add such pincodes in array *PINS_TO_IGNORE*
