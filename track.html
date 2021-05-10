@@ -48,7 +48,6 @@
     <script>
         const DIST_CODE = "363"; // Pune
         const POLLING_FREQ = 20000; // 20 Seconds
-        const PINS_TO_IGNORE = [413801, 413802, 412202, 412212, 413106, 413114, 412207, 413102];
 
         function getTodaysDate() {
             var today = new Date();
@@ -107,7 +106,9 @@
                 for (var session of currentCenter.sessions) {
                     if (session.min_age_limit == 18) {
                         count++;
-                        if (session.available_capacity > 0 && PINS_TO_IGNORE.indexOf(currentCenter.pincode) === -1) {
+                        let pinString = currentCenter.pincode + "";
+                        pinString = pinString.substring(0,3);
+                        if (session.available_capacity > 0 && pinString === "411") {
                             availableCenters.push(session);
                             tableString = tableString + `<tr>
                                 <td>${session.date}</td>
