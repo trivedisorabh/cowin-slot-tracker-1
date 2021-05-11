@@ -7,10 +7,24 @@
 }
 
 #start-btn {
-    margin: 10px auto;
+    margin: 0 auto;
     width: 150px;
 }
 
 .container .form-control {
     background-color: #ffffff;
+}
+
+#error-msg {
+    text-align: center;
+    margin-top: 10px;
+    font-weight: bold;
+}
+.red {
+    color: tomato;
+}
+
+.hide {
+    visibility: hidden;
+    display: none;
 }

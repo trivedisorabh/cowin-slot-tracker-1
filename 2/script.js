@@ -26,12 +26,23 @@ function playSound() {
     });
 }
 
+function showError(errorStr) {
+    $('#error-msg').text(errorStr);
+    $('#error-msg').removeClass('hide');
+}
+
+function hideError() {
+    $('#error-msg').text("");
+    $('#error-msg').addClass('hide');
+}
+
 /** Polling Methods */
 function fetchState() {
     showLoader();
     fetch(`https://cdn-api.co-vin.in/api/v2/admin/location/states`)
         .then((res) => (res.json()))
         .then((res) => {
+            hideError();
             hideLoader();
             let selectHtmlStr = '';
             for(state of res.states) {
@@ -41,8 +52,8 @@ function fetchState() {
             fetchDist(res.states[0].state_id);
         })
         .catch(() => {
+            showError('Error fetching states from the API. Try refreshing the page.');
             hideLoader();
-            // TODO: Show error
         });
 }
 
@@ -51,8 +62,8 @@ function fetchDist(stateId) {
     fetch(`https://cdn-api.co-vin.in/api/v2/admin/location/districts/${stateId}`)
         .then((res) => (res.json()))
         .then((res) => {
+            hideError()
             hideLoader();
-            console.log('res: ', res);
             let selectHtmlStr = '';
             for(district of res.districts) {
                 selectHtmlStr += `<option value=${district.district_id}>${district.district_name}</option>`;
@@ -60,6 +71,7 @@ function fetchDist(stateId) {
             $('#district-select').html(selectHtmlStr);
         })
         .catch(() => {
+            showError('Error fetching districts from the API. Try refreshing the page.');
             hideLoader();
         });
 }
@@ -76,14 +88,17 @@ function fetchCenters() {
             console.log('res: ', res);
         })
         .catch(() => {
-            // TODO: Show error
+            const freq = $('#polling-freq-select option:selected').text();
+            showError(`Error fetching centers from the API. Retrying in ${freq}... You can also press Start Button to retry immediately `);
+            hideLoader();
         })
 }
-
+let appInterval;
 function startPolling() {
     playSound();
     fetchCenters();
-    setInterval(fetchCenters, $('#polling-freq-select').val());
+    if(appInterval) clearInterval(appInterval);
+    appInterval = setInterval(fetchCenters, $('#polling-freq-select').val());
 }
 
 function onStateChange() {
