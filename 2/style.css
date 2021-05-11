@@ -1,5 +1,5 @@
 body {
-    padding: 20px;
+    padding: 50px;
 }
 
 .main-wrapper {
@@ -20,7 +20,7 @@ body {
     width: 150px;
 }
 
-.container .form-control {
+.main-wrapper .form-control {
     background-color: #ffffff;
 }
 

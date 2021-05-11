@@ -46,10 +46,14 @@ function fetchState() {
             hideLoader();
             let selectHtmlStr = '';
             for(state of res.states) {
-                selectHtmlStr += `<option value=${state.state_id}>${state.state_name}</option>`;
+                if (state.state_id === 21) {
+                    selectHtmlStr += `<option value=${state.state_id} selected>${state.state_name}</option>`;
+                } else {
+                    selectHtmlStr += `<option value=${state.state_id}>${state.state_name}</option>`;
+                }
             }
             $('#state-select').html(selectHtmlStr);
-            fetchDist(res.states[0].state_id);
+            fetchDist(21);
         })
         .catch(() => {
             showError('Error fetching states from the API. Try refreshing the page.');
@@ -66,7 +70,11 @@ function fetchDist(stateId) {
             hideLoader();
             let selectHtmlStr = '';
             for(district of res.districts) {
-                selectHtmlStr += `<option value=${district.district_id}>${district.district_name}</option>`;
+                if(district.district_id === 363) {
+                    selectHtmlStr += `<option value=${district.district_id} selected>${district.district_name}</option>`;
+                } else {
+                    selectHtmlStr += `<option value=${district.district_id}>${district.district_name}</option>`;
+                }
             }
             $('#district-select').html(selectHtmlStr);
         })
@@ -110,6 +118,7 @@ function startPolling() {
 function stopPolling() {
     clearInterval(appInterval);
     $('#stop-btn').addClass('hide');
+    hideError();
 }
 
 function onStateChange() {
