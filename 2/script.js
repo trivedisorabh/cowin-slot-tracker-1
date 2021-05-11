@@ -124,7 +124,11 @@ function parseCenters(centers) {
             for (var session of currentCenter.sessions) {
                 if (session.min_age_limit == 18) {
                     count++;
-                    if (session.available_capacity > 0 ) {
+                    let pinString = currentCenter.pincode + "";
+                    pinString = pinString.substring(0,3);
+                    let pinCondition = true;
+                    if(pinToFilter) pinCondition = pinString === pinToFilter;
+                    if (session.available_capacity > 0 && pinCondition) {
                         availableCenters.push(session);
                         tableString = tableString + `<tr>
                             <td>${session.date}</td>
