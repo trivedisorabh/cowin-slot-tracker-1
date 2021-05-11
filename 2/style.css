@@ -1,0 +1,16 @@
+.main-wrapper {
+    border: 1px solid #3c3c3c;
+    box-shadow: 5px 4px 5px 0px rgba(0,0,0,0.58);
+    -webkit-box-shadow: 5px 4px 5px 0px rgba(0,0,0,0.58);
+    -moz-box-shadow: 5px 4px 5px 0px rgba(0,0,0,0.58);
+    padding: 10px;
+}
+
+#start-btn {
+    margin: 10px auto;
+    width: 150px;
+}
+
+.container .form-control {
+    background-color: #ffffff;
+}
