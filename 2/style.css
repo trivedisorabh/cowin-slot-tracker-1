@@ -33,7 +33,16 @@ body {
     color: tomato;
 }
 
+.green {
+    color: #0f5132;
+    font-weight: bold;
+}
+
 .hide {
     visibility: hidden;
     display: none;
+}
+
+#details-table {
+    padding: 20px;
 }

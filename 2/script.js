@@ -95,14 +95,58 @@ function fetchCenters() {
         .then((res) => (res.json()))
         .then((res) => {
             hideError();
-            console.log('res: ', res);
-            hideLoader();
+            $('#dist-code span').text(districtCode);
+            $('#last-refresh-time span').text(n);
+            parseCenters(res.centers);
         })
         .catch(() => {
             const freq = $('#polling-freq-select option:selected').text();
             showError(`Error fetching centers from the API. Retrying in ${freq}... You can also press Start Button again to retry immediately. `);
             hideLoader();
         })
+}
+
+function parseCenters(centers) {
+    const pinToFilter = $('#pin-filter').val();
+    let availableCenters = [];
+    let count = 0;
+    let tableString = `<table class="table table-striped"><thead>
+        <th>Date</th>
+        <th>Vaccination</th>
+        <th>Slots</th>
+        <th>Pincode</th>
+        <th>Name</th>
+        <th>Address</th>
+        </thead><tbody>`;
+        for (var i = 0; i < centers.length; i++) {
+            var currentCenter = centers[i];
+            for (var session of currentCenter.sessions) {
+                if (session.min_age_limit == 18) {
+                    count++;
+                    if (session.available_capacity > 0 ) {
+                        availableCenters.push(session);
+                        tableString = tableString + `<tr>
+                            <td>${session.date}</td>
+                            <td>${session.vaccine}</td>
+                            <td>${session.available_capacity}</td>
+                            <td>${currentCenter.pincode}</td>
+                            <td>${currentCenter.name}</td>
+                            <td>${currentCenter.address}</td>
+                            </tr>`;
+                    }
+                }
+            }
+        }
+        tableString = tableString + '</tbody></table>'
+        $('#count-msg span').text(count);
+        $('#total-count-msg span').text(centers.length);
+        $('#pin-filter-msg span').text(pinToFilter);
+        if (availableCenters.length) {
+                console.log('Slot was found please check page', centers);
+                $('#details-table').html(tableString);
+                playSound();
+        }
+    hideLoader();
 }
 
 /** Polling Methods */

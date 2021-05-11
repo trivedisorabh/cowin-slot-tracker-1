@@ -49,7 +49,41 @@
             <button id="stop-btn" class="btn btn-danger mt-3 hide" onClick="stopPolling()">Stop</button>
         </div>
         <hr />
-        
+
+        <!-- Table -->
+        <div class="row">
+            <div class="col-2">
+                <div id="total-count-msg" class="alert alert-primary">
+                    Total Center found: <span>-</span>
+                </div>
+            </div>
+            <div class="col-2">
+                <div id="count-msg" class="alert alert-primary">
+                    Centers found for 18+: <span>-</span>
+                </div>
+            </div>
+            <div class="col-2">
+                <div id="available-msg" class="alert alert-primary">
+                    Slot available in: <span class="green text-bold">-</span>
+                </div>
+            </div>
+            <div class="col-2">
+                <div id="last-refresh-time" class="alert alert-primary">
+                    Last updated on: <span>-</span></div>
+            </div>
+            <div class="col-2">
+                <div id="pin-filter-msg" class="alert alert-primary">
+                    Filtering for Pin: <span>-</span>
+                </div>
+            </div>
+            <div class="col-2">
+                <div id="dist-code" class="alert alert-primary">
+                    District Code: <span>-</span>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="details-table"></div>
+
     </div>
     <div id="loader" class="loader loader-default"></div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
