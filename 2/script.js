@@ -91,6 +91,7 @@ function fetchCenters() {
     var d = new Date();
     var n = d.toLocaleTimeString();
     const districtCode = $('#district-select').val();
+    $('#available-msg').removeClass('alert-success').addClass('alert-primary')
     fetch(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id=${districtCode}&date=${today}`)
         .then((res) => (res.json()))
         .then((res) => {
@@ -140,10 +141,12 @@ function parseCenters(centers) {
         tableString = tableString + '</tbody></table>'
         $('#count-msg span').text(count);
         $('#total-count-msg span').text(centers.length);
-        $('#pin-filter-msg span').text(pinToFilter);
+        $('#pin-filter-msg span').text(pinToFilter || '-');
+        $('#available-msg span').text(availableCenters.length)
         if (availableCenters.length) {
                 console.log('Slot was found please check page', centers);
                 $('#details-table').html(tableString);
+                $('#available-msg').removeClass('alert-primary').addClass('alert-success')
                 playSound();
         }
     hideLoader();
