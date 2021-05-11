@@ -18,7 +18,7 @@ function getTodaysDate() {
 }
 
 function playSound() {
-    var audio = new Audio('audio.mp3');
+    var audio = new Audio('./data/audio.mp3');
     audio.play().then(() => {
         // document.getElementById('sound-permission-status').innerHTML = 'Current Audio Status: <span class="badge bg-success">Permission Granted</span>';
     }).catch(() => {
