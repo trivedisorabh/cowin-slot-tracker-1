@@ -36,7 +36,7 @@ function hideError() {
     $('#error-msg').addClass('hide');
 }
 
-/** Polling Methods */
+/** Fetching Methods */
 function fetchState() {
     showLoader();
     fetch(`https://cdn-api.co-vin.in/api/v2/admin/location/states`)
@@ -77,6 +77,7 @@ function fetchDist(stateId) {
 }
 
 function fetchCenters() {
+    showLoader();
     const today = getTodaysDate();
     const apiKey = "48m5Mhn2+YeoafuB11Lq1D5sm2af6A0seSIb6un+3/8=";
     var d = new Date();
@@ -85,7 +86,9 @@ function fetchCenters() {
     fetch(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/calendarByDistrict?district_id=${districtCode}&date=${today}`)
         .then((res) => (res.json()))
         .then((res) => {
+            hideError();
             console.log('res: ', res);
+            hideLoader();
         })
         .catch(() => {
             const freq = $('#polling-freq-select option:selected').text();
@@ -93,12 +96,20 @@ function fetchCenters() {
             hideLoader();
         })
 }
+
+/** Polling Methods */
 let appInterval;
 function startPolling() {
     playSound();
     fetchCenters();
     if(appInterval) clearInterval(appInterval);
     appInterval = setInterval(fetchCenters, $('#polling-freq-select').val());
+    $('#stop-btn').removeClass('hide');
+}
+
+function stopPolling() {
+    clearInterval(appInterval);
+    $('#stop-btn').addClass('hide');
 }
 
 function onStateChange() {
