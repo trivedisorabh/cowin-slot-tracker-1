@@ -92,7 +92,7 @@ function fetchCenters() {
         })
         .catch(() => {
             const freq = $('#polling-freq-select option:selected').text();
-            showError(`Error fetching centers from the API. Retrying in ${freq}... You can also press Start Button to retry immediately `);
+            showError(`Error fetching centers from the API. Retrying in ${freq}... You can also press Start Button again to retry immediately. `);
             hideLoader();
         })
 }
